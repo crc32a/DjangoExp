@@ -1,11 +1,13 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from app.main.testview.views import TestView
+from app.main.ipv4.views import IPv4View
 from app.main.account.views import AccountView
 admin.autodiscover()
 
 viewList = []
 viewList.append(AccountView('Account','/account/login'))
+viewList.append(IPv4View('IPv4 Toys','/ipv4/dec2bin'))
 viewList.append(TestView('Test','/test/hello'))
 
 urls = ['',(r'^admin/',include(admin.site.urls))]

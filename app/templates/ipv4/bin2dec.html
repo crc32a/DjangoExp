@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block headers %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#hidesixteen').click(function() {
+            $('table.sixteen').hide();
+    });
+        $('#showsixteen').click(function() {
+            $('table.sixteen').show();
+    });
+    $('table.sixteen').hide();
+});
+
+</script>
+<style type="text/css">
+.dec {
+    background-color: #a0a0a0;
+}
+
+.p16 {
+    background-color: #ffa0a0;
+}
+
+.bin {
+    background-color: #a0ffa0;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<table>
+    <tr><td><input type="submit" value="hide sixteen table" id="hidesixteen"/></td><td><input type="submit" value="Show sixteen table" id="showsixteen"/></td></tr>
+</table>
+
+<table class="sixteen">
+    <caption>Binary Table</caption>
+    <tr><th class="dec">n</th><th class="p16">n*16</th><th class="bin">n(bin)</th></tr>
+    <tr><td class="dec">0</td><td class="p16">0</td><td class="bin">0000</td></tr>
+    <tr><td class="dec">1</td><td class="p16">16</td><td class="bin">0001</td></tr>
+    <tr><td class="dec">2</td><td class="p16">32</td><td class="bin">0010</td></tr>
+    <tr><td class="dec">3</td><td class="p16">48</td><td class="bin">0011</td></tr>
+    <tr><td class="dec">4</td><td class="p16">64</td><td class="bin">0100</td></tr>
+    <tr><td class="dec">5</td><td class="p16">80</td><td class="bin">0101</td></tr>
+    <tr><td class="dec">6</td><td class="p16">96</td><td class="bin">0110</td></tr>
+    <tr><td class="dec">7</td><td class="p16">112</td><td class="bin">0111</td></tr>
+    <tr><td class="dec">8</td><td class="p16">128</td><td class="bin">1000</td></tr>
+    <tr><td class="dec">9</td><td class="p16">144</td><td class="bin">1001</td></tr>
+    <tr><td class="dec">10</td><td class="p16">160</td><td class="bin">1010</td></tr>
+    <tr><td class="dec">11</td><td class="p16">176</td><td class="bin">1011</td></tr>
+    <tr><td class="dec">12</td><td class="p16">192</td><td class="bin">1100</td></tr>
+    <tr><td class="dec">13</td><td class="p16">208</td><td class="bin">1101</td></tr>
+    <tr><td class="dec">14</td><td class="p16">224</td><td class="bin">1110</td></tr>
+    <tr><td class="dec">15</td><td class="p16">240</td><td class="bin">1111</td></tr>
+</table>
+<br/>
+{% if bin2decform %}
+    <form action="/ipv4/bin2dec" method="post">
+        <table>
+            <caption>Enter the decimal value for the binary number {{ binval }}</caption>
+            {{ bin2decform.as_table }}
+        </table>
+        <input type="submit" name="button" value="Check your guess"/>
+        <input type="submit" name="button" value="Pick new number"/>
+        <input type="submit" name="button" value="Show binary"/>
+    </form>
+<br/>
+{% endif %}
+{% endblock %}

@@ -4,6 +4,7 @@ import datetime
 import cPickle
 import urllib
 import base64
+import string
 import copy
 import json
 import zlib
@@ -256,3 +257,30 @@ def frange(fstart,fstop,nsteps):
     hx = fstart - dx/2
     for i in xrange(1,nsteps+1):
         yield hx + dx*i
+
+
+def int2bin(int_in,width):
+    i = 0
+    curr = int_in
+    out = []
+    while True:
+        if curr <= 0:
+            break        
+        if curr%2 == 0:
+            out.append("0")
+        else:
+            out.append("1")
+        curr >>= 1
+    for i in xrange(0,width - len(out)):
+        out.append("0")
+    out.reverse()
+    outStr = string.join(out,"")
+    return outStr
+
+def bin2int(binStr):
+    dec = 0
+    bits = [int(bit)%2 for bit in binStr]
+    bits.reverse()
+    for i in xrange(len(bits)-1,-1,-1):
+        dec += bits[i]*(1<<i)
+    return dec
