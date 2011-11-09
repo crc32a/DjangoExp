@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>To edit the actual attributes use the admin interface. <br/>This form is for settings the passwd</p>
+<form action="{{ self_link|safe }}" method="post">
+    <table>
+        {{ changedroppasswdform.as_table }}
+    </table>
+    <input type="submit" name="button" value="Set Password">
+</form> 
+{% endblock %}

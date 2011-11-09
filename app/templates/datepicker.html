@@ -1,0 +1,11 @@
+<script type="text/javascript">
+$(document).ready(function () {
+   {% for input_id in datepickers %}
+       $("{{ input_id }}").datepicker({'dateFormat':'yy-mm-dd',
+                                       'changeYear':'true',
+                                       'changeMonth':'true',
+                                       'constrainInput':'false',
+                                       'hidePrevNext':'true'});
+   {% endfor %}
+});
+</script>

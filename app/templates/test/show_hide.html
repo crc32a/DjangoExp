@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block headers %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#hp').click(function() {
+            $('tr.poor').hide();
+    });
+        $('#hg').click(function() {
+            $('tr.good').hide();
+    });
+        $('#ho').click(function() {
+            $('tr.open').hide();
+    });
+        $('#hc').click(function() {
+            $('tr.closed').hide();
+    });
+        $('#sa').click(function() {
+            $('tr').show();
+    });
+
+});
+</script>
+{% endblock %}
+{% block content %}
+<table>
+    <tr{%if tr.class %} class="{{ tr.class|safe }}"{% endif %}>
+        <td><input bgcolor="#ff0000" type="submit" value="hide poor" id="hp"/></td>
+        <td><input type="submit" value="hide good" id="hg"/></td>
+        <td><input type="submit" value="hide closed" id="hc"/></td>
+        <td><input type="submit" value="Hide opened" id="ho"/></td>
+        <td><input type="submit" value="show all" id="sa"/></td>
+    </tr>
+</table>
+<table border="1">
+   <tr>
+     <td>Col1</td>
+     <td>Col2</td>
+   </tr>
+   <tr class="poor open"> <td>Poor</td><td>Open</td></tr>
+   <tr class="poor closed"><td>Poor</td><td>Closed</td></tr>
+   <tr class="good open"><td>Good</td><td>Open</td></tr>
+   <tr class="good closed"><td>Good</td><td>Closed</td></tr>
+</table>
+{% endblock %}

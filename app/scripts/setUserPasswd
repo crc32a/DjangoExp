@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+
+import sys
+import os
+dir_name = os.path.dirname(os.path.abspath("__file__"))
+base_dir = os.path.abspath(os.path.join(dir_name,"../.."))
+
+sys.path.insert(0,base_dir)
+from django.core.management import setup_environ
+from app import settings
+setup_environ(settings)
+
+from django.db.models import Q
+from app.main.models import *
+
+def printf(format,*args): sys.stdout.write(format%args)
+
+def fprintf(fp,format,*args): fp.write(format%args)
+
+
+def usage(prog):
+    printf("usage is %s <uid> <passwd>\n",prog)
+    printf("\n")
+    printf("Set the platform users passwd\n")
+    printf("Creates the user too if they don't exist\n")
+
+if __name__=="__main__":
+    prog = os.path.basename(sys.argv[0])
+    if not len(sys.argv)>=2:
+        usage(prog)
+        sys.exit()
+    uid = sys.argv[1]
+    passwd = sys.argv[2]
+    try:
+        user = User.objects.get(uid=uid)
+    except User.DoesNotExist:
+        printf("Creating user %s\n",uid)
+        user = User()
+        user.uid = uid
+    printf("Setting passwd\n")
+    user.setPasswd(passwd)
+    user.save()
+
+    
+

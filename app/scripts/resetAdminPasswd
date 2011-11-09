@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+
+#boiler plate code for testing on the command line
+
+import datetime
+import sys
+import os
+dir_name = os.path.dirname(os.path.abspath("__file__"))
+parent_dir = os.path.abspath(os.path.join(dir_name,"../.."))
+sys.path.insert(0,parent_dir)
+from django.core.management import setup_environ
+from app import settings
+setup_environ(settings)
+
+# The setup code above is needed for python to mapout where the app is
+# modules from settings.py so you can only import application modules below 
+# this point when testing.
+
+from django.contrib.auth.models import User
+import django.db
+from django.db import connection
+from django.db.models import Q
+import traceback
+import re
+
+def usage(prog):
+    printf("usage is %s [username] <passwd>\n",prog)
+    printf("\n")
+    printf("reset the user password. If username is not specified then\n")
+    printf("reset the main admin passwd\n")
+
+def printf(format,*args): sys.stdout.write(format%args)
+
+def fprintf(fp,format,*args): fp.write(format%args)
+
+if __name__=="__main__":
+    prog = os.path.basename(sys.argv[0])
+    if len(sys.argv)>=3:
+        passwd = sys.argv[2]
+        username = sys.argv[1]
+        rs = User.objects.filter(username=username)
+        if len(rs) == 0:
+            printf("user not found\n")
+            sys.exit()
+        if len(rs) > 1:
+            printf("too many users found\n")
+            sys.exit()
+        user = rs[0]
+    elif len(sys.argv)==2:
+        user = User.objects.all()[0]
+        username = user.username
+        passwd = sys.argv[1]
+    else:
+        usage(prog)
+        sys.exit()
+
+user.set_password(passwd)
+user.save()
+printf("Passwd for %s set\n",username)

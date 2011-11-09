@@ -1,0 +1,45 @@
+<style type="text/css">
+#ui-datepicker-div { border: 1px solid#000000; }
+
+.ui-datepicker-calendar tbody tr td:not(.ui-datepicker-unselectable):not(.ui-datepicker-week-end):not(:hover) {
+    background-color: #ffcc99;
+}
+.ui-datepicker-calendar tbody tr td,.ui-datepicker-calendar thead tr th{
+    margin: 5px;
+    font-size: 150%;
+}
+.ui-datepicker-calendar tbody tr td:hover:not(.ui-datepicker-unselectable) {
+    background-color: #707070;
+    color: yellow;
+}
+
+.ui-datepicker-calendar tbody tr td a:hover {
+    color: yellow;
+}
+
+.ui-datepicker-calendar tbody tr td a {
+    color: #000000;
+}
+
+
+.ui-datepicker { 
+    background: #ffffff;
+}
+.ui-datepicker-header { background: #ffffff; }
+.ui-datepicker-links {
+    background-color: #000000;
+}
+
+.ui-datepicker-calendar thead tr th {
+   background-color: #808080;
+   color: #ffffff;
+}
+
+td.ui-datepicker-week-end:not(.ui-datepicker-unselectable) {
+    color: #ffffff;
+    background-color: #ff9933;
+
+}
+
+
+</style>

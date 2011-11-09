@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<table align="center" width="50%">
+    <caption>Currently logged in as {{ uid }}</caption>
+        <tr>
+           <th class="td_cyan">Role</th><th class="td_cyan">Description</th>
+        </tr>
+    {% for role in roles %}
+        <tr>
+            <td class="{{ role.color }}"">{{ role.name }}</td><td>{{ role.desc }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

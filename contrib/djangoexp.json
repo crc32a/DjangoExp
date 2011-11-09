@@ -1,0 +1,20 @@
+{
+  "CRYPTO_KEY": "YourCryptoKeyHere", 
+  "ADMINS": [
+    [
+      "YourUser", 
+      "YourUser@domain.com"
+    ]
+  ], 
+  "STATIC_PATH": "yourStaticPath", 
+  "DATABASES": {
+    "default": {
+      "ENGINE": "django.db.backends.mysql", 
+      "NAME": "yourDatabase", 
+      "HOST": "127.0.0.1", 
+      "USER": "yourUser", 
+      "PASSWORD": "yourPasswd", 
+      "PORT": ""
+    }
+  }
+}

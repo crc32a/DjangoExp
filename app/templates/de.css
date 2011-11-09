@@ -1,0 +1,158 @@
+body {
+ margin:10px;
+ background:#808080;
+ color: #333333;
+ text-align:center;
+ padding:0;
+ font-size: 8pt;
+ font-weight: 600;
+ font-family: "Arial Black","Helvetica", "sans-serif";
+ }
+
+#outer {
+ text-align:left;
+ border:1px solid #000000;
+ width:100%;
+ margin:auto;
+ }
+
+#hdr {
+ height:68px;
+ background:#333333;
+ color: #333333;
+ }
+
+#bar {
+ height:25px;
+ background:#c0c0c0;
+ color: #333333;
+ border:solid #000000;	
+ border-width:1px 0 1px 0;
+ font-size:11px;
+ }
+
+#bodyblock {
+ position:relative;
+ background: #dcdcdc;
+ color: #333333;
+ width:100%;
+ padding:0;
+ }
+
+#l-col {
+ float:left;
+ background:#dcdcdc;
+ color: #333333;
+ width:15%;
+ }
+
+#cont {
+ width:85%;
+ background:#ffffff;
+ color: #333333;
+ border:solid #000000;	
+ border-width:0 0 0 1px;
+ text-align:left;
+ }
+
+#ftr {
+ height:25px;
+ background:#c0c0c0;
+ color: #333333;
+ border:solid black;
+ border-width:1px 0 0 0;
+ margin:0;
+ }
+
+/* Presentation Stylesheet */ 
+
+.tdlink {
+    text-decoration: none;
+    background: #505050;
+    color: #ffffff;
+}
+
+.tdlink:hover {
+    background: #000000;
+}
+
+.tdlink a:visited{
+    color: #ffffff;
+}
+
+.red {
+    color: #ff0000;
+}
+
+.black{
+    color: #000000;
+}
+
+.huge {
+    font-size: 64pt;
+    font-weight: 600;
+    font-family: "Arial Black","Helvetica", "sans-serif";
+}
+
+h3, p {
+ margin:0;
+ padding:15px;
+ }
+
+h4 {
+ margin:0; 
+ padding: 5px 0;
+ }
+
+.td_cyan {
+    background-color: #70ffff;
+    color: #000000;
+}
+
+.td_gray {
+    background-color: #d0d0d0;
+}
+
+.td_green {
+    background-color: #70ff70;
+}
+
+.td_tiny {
+    font-size: 2pt;
+}
+
+.td_yellow {
+    background-color: #ffff00;
+    color: #000000;
+}
+
+.td_white {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.td_red {
+    background-color: #ff0000;
+    color: #000000;
+}
+
+.mono {
+    font-family: courier, monospace;  
+    font-size: 8pt;  
+}
+
+.sidebar_white {
+    background-color: #eeeeee;
+}
+
+.sidebar_gray {
+  background-color: #b7b7b7;
+  }
+
+.sidebar_header {
+   background-color: lightblue;
+  }
+
+a {
+    text-decoration: none;
+}

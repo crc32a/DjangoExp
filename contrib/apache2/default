@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+    DocumentRoot /var/www/django-app/
+    ServerName django-app
+    Alias /static/admin/ /usr/local/lib/python2.6/dist-packages/django/contrib/admin/media/
+    WSGIScriptAlias / /var/www/django-app/app.wsgi
+    ErrorLog /var/log/apache2/wsgi_log
+    ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
+
+

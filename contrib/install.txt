@@ -1,0 +1,107 @@
+Installation instructions
+
+
+install the python MySQLdb module via
+sudo apt-get install python-mysqldb python-dateutil
+
+on the database install mysql-server
+apt-get install mysql-server
+
+install the python Crypto module via
+sudo apt-get install python-crypto
+
+
+Ubuntu 10.04 is still django 1.1.1
+    Get django1.3 from https://www.djangoproject.com/download/
+    untar the file then run python setup.py install
+    
+edit the platform_app.json file and point to your database
+    "NAME" is the database of the database
+    don't tamper with django.db.backend.mysql unless you really want to use
+    postgress or something else
+
+create a mysql database
+in the case of this example platform_app.json you would create a local mysql database
+    create database yourDB
+    grant all on pa.* to 'your user'@'%' identified by 'your passwd'
+
+cd into the app directory and run the below command:
+    During the run you will create an superuser admin account to administer the django account
+
+    python manage.py syncdb
+
+
+cd into the ./app/scripts directory. You will need to be in this dir to run the commands
+
+populate the view table which will be used to reference authtentication roles for users:
+    run ./populate
+
+create your first app user since you need one to create other users:
+    run ./setUserPasswd <username> <userpasswd>
+This is needed because the django admin interface can't be used to create these users unless you
+know how to populate the passwd field with a hex sha256 sum with the intended passwd. Only the 
+sha256 hash of the user is stored in the database.
+
+This app user is not the same kind of user account as the django user you created when you 
+ran python manage.py syncdb I'll explain more on this later
+
+cd into you ./app directory
+run the command with your ip and port. For example to bind to local use
+    python manage.py runserver 127.0.0.1:8080
+
+loginto the admin interface via a web browser
+   http://127.0.0.1:8080/admin/
+
+   login with the user credentials you created above. If you lost your password then go into
+   the ./app/scripts directory and run ./resetAdminPasswd <new passwd>. In case you lost the
+   user name the script display a message  "passwd set for <your admin username> set" indicating
+   the admin user name
+   
+You should see an Auth panel as well as a Main panel.
+ Users under the auth panel is for users that can login to the django admin site.
+
+Your actual app user for this project are in the Main panel.
+
+Click on Users in the main panel. You should only see the single user you created with the
+setUserPasswd script.
+
+Click on this user.
+check the enable box. (If you don't check enabled the user won't be able to login via the app)
+In the roles box move edituser to the Chosen roles. 
+This grants this user the ability to create other accounts view the Account: Add/Edit user view.
+because of the sha256 algo I'm useing the admin panel can't currently create users. In short the admin
+interface is not aware of how to encode the users passwd. At least not yet.
+
+Should you loose
+this users credentials you can change their passwd with the setUserPasswd script. Since the user 
+already exists the script will just edit their passwd.
+
+Now login with your user via
+    http://127.0.0.1:8080/
+
+Once logged in (You can tell cause of the "successfull login" message"
+you can click "Edit/Add User" and add other users. Be advised that you will
+need to log into the admin interface to enable the user as well as assign roles for them.
+
+You can create roles by clicking Roles in the Main panel in the admin interface.
+From there you can add roles. After this you can Add roles to Views by clicking on Views
+under main then clicking the view class and view_name pair. For example click on 
+AccountView:edituser and you will notice the edituser role is already inside the Chosen roles
+box. This was done by the populate script. This means only users that have the edituser role can
+enter this view. To enter a view a user only needs to have 1 role in commo. Meaning if you have
+a test role in addition to edituser role assigned to this role then people with a test role can
+also enter this view.
+
+You can experiment creating a test role and adding the role to all roles in the TestView class
+then watch as non test users are denied access to this view. If the view has no roles assign to it
+then it is assumed every one logged in can see this view. During development to restrict a view 
+use the @requireRoles annotation above the view method. This will insure that the user must atleast be
+logged in to see the view. To make a view globaly accessable even to non logged in uses simple don't 
+use the @requireRoles decorator.
+
+Example the main/account/methods.py login method doesn't have @requireRoles decorator.
+If you were to add one then non logged in users would have no way to login. 
+
+When ever the code is updated with more views besure to run the 
+./scripts/populate script to add these new views to the database.
+

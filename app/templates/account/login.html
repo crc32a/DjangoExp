@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="/account/login/" method="post">
+   <table>
+{{ loginform.as_table }}
+   </table>
+   <input type="submit" name="button" value="Login" />
+   <input type="submit" name="button" value="Logout" />
+</form>
+{% endblock %}
+

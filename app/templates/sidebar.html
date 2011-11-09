@@ -1,0 +1,5 @@
+
+<table border="0" width="100%">
+{% for link in links.side %}<tr><td class="tdlink" onClick="location.href='{{ link.href }}'">{{ link.name }}</td></tr>
+{% endfor %}
+</table>

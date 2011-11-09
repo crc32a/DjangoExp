@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action="/account/edituser/" method="post">
+<table>
+{{ loginform.as_table }}
+</table>
+<input type="submit" name="button" value="Submit" />
+{% endblock %}
+

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block headers %}
+{% include 'datepicker.css' %}
+{% include 'datepicker.html' %}
+<style type="text/css">
+#log thead tr th {
+  background-color: lightblue;
+  font-size: 12pt;
+}
+#log tbody tr td {
+  font-size: 8pt;
+}
+
+#log tbody tr td.td_tiny {
+  font-size: 6pt;
+}
+
+.td_odd {
+    background-color: #b7b7b7;
+}
+.td_even {
+    background-color: #e0e0e0;
+}
+</style>
+<style type="text/css">
+#dhtmltooltip{
+position: absolute;
+width: 150px;
+border: 2px solid black;
+padding: 2px;
+background-color: lightyellow;
+visibility: hidden;
+z-index: 100;
+/*Remove below line to remove shadow. Below line should always appear
+last within this CSS*/
+filter:
+progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135);
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function()
+  {
+   $("#log tbody tr:nth-child(even)").addClass("td_even");
+   $("#log tbody tr:nth-child(odd)").addClass("td_odd");
+  });
+</script>
+{% endblock %}
+{% block earlybody %}
+{% include 'mousepopup.js' %}
+{% endblock %}
+{% block content %}
+{% if logform %}
+  <form action="/account/log" method="post">
+    <table>
+    {{ logform.as_table }}
+    </table>
+    <input type="submit" value ="Search logs" ></input>
+  </form>
+{% endif %}
+<br/>
+{% if logentries %}
+<table id="log" align="center">
+  <thead>
+  <tr>
+     {% for th in logentries.th %}         <th>{{ th }}</th>
+{% endfor %}  </tr>
+  </thead>
+  <tbody>
+{% for row in logentries.tr %}    <tr>
+{% for td in row %}        <td{% if td.class %} class="{{ td.class|safe }}"{% endif %}{% if td.hover %} {{ td.hover|safe }}{% endif %}{% if td.self_link %} {{ td.self_link|safe }}{% endif %}><pre>{{ td.val }}</pre></td>
+{% endfor %}    </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

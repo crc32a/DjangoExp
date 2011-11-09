@@ -1,0 +1,22 @@
+For unbuntu 10.04 install and configure apache2
+==============================================
+1. Install apache2(with wsgi)
+    apt-get install apache2 apache2-mpm-prefork libapache2-mod-wsgi
+
+2. Stop apache so you can mangle it
+    /etc/init.d/apache2 stop
+
+3. Copy the default config(Overwriting the original)
+    cp ./default /etc/apache2/sites-available/default
+
+4. the /etc/apache2/sites-enabled/000-default link should will 
+   still work since you replaced the default file.
+
+5. Install the django app from Git
+    mkdir -p /var/www/django-app
+    cp ./app.wsgi /var/www/django-app
+    cd /var/www/django-app
+    git clone ssh://git@repo-n01.cloudplatform.rackspace.net/home/git/platform-django-app
+    
+6. Start apache
+    /etc/init.d/apache2 start
