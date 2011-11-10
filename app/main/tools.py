@@ -219,6 +219,20 @@ def keygetter(key):
         return item[key]
     return wrapper
 
+def maxStr(n):
+    def wrapper(strIn):
+        if strIn == None:
+            return None
+        return strIn[:n]
+    return wrapper
+
+def intOrZero(strIn):
+    try:
+        val = int(strIn)
+    except ValueError:
+        val = 0
+    return val
+
 @transaction.commit_manually
 def flush_tx():
     transaction.commit()

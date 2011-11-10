@@ -1,15 +1,33 @@
 from django.template import Context
 from app.main.logger import ViewLogger
 from app.main.models import *
+from app.main.tools import *
 import app.crypttools
 import app.settings
 import copy
 import sys
 import os
 
+metaMap = [ ("CONTENT_LENGTH",intOrZero),
+            ("CONTENT_TYPE",maxStr(8192)),
+            ("HTTP_ACCEPT_ENCODING",maxStr(8192)),
+            ("HTTP_ACCEPT_LANGUAGE",maxStr(8192)),
+            ("HTTP_HOST",maxStr(128)),
+            ("HTTP_REFERER",maxStr(256)),
+            ("HTTP_USER_AGENT",maxStr(256)),
+            ("QUERY_STRING",maxStr(8192)),
+            ("REMOTE_ADDR",maxStr(64)),
+            ("REMOTE_HOST",maxStr(128)),
+            ("REMOTE_USER",maxStr(64)),
+            ("REQUEST_METHOD",maxStr(8)),
+            ("SERVER_NAME",maxStr(128)),
+            ("SERVER_PORT",intOrZero)
+]
+
 class ReqContainer(object):
     def __init__(self,caller_object,request,*args,**kw):
         self.rcount = RequestCounter()
+        self.rcount.request_meta = self.fetchRequestMeta(request)
         self.rcount.save()
         self.req_id = self.rcount.id
         self.args = copy.deepcopy(args) #For debugging purposes
@@ -83,3 +101,11 @@ class ReqContainer(object):
             form_name = None
         return form_name
 
+    def fetchRequestMeta(self,request):
+        obj = RequestMeta()
+        for (name,cookfunc) in metaMap:
+            val = request.META.get(name,None)
+            cooked_val = cookfunc(val)
+            setattr(obj,name,cooked_val)
+        obj.save()
+        return obj

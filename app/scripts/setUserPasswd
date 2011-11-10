@@ -19,7 +19,7 @@ def fprintf(fp,format,*args): fp.write(format%args)
 
 
 def usage(prog):
-    printf("usage is %s <uid> <passwd>\n",prog)
+    printf("usage is %s <uid> <passwd> [enable=true|false]\n",prog)
     printf("\n")
     printf("Set the platform users passwd\n")
     printf("Creates the user too if they don't exist\n")
@@ -37,6 +37,15 @@ if __name__=="__main__":
         printf("Creating user %s\n",uid)
         user = User()
         user.uid = uid
+    if len(sys.argv)>=4:
+        if sys.argv[3].split("=")[1].lower() == "true":
+            print "Enabling user"
+            user.enabled = True
+        elif sys.argv[3].split("=")[1].lower() == "false":
+            print "Disabling user"
+            user.enabled = False
+        else:
+            print "invalid enable val so not tampering with enable bit"
     printf("Setting passwd\n")
     user.setPasswd(passwd)
     user.save()

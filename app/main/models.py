@@ -91,8 +91,25 @@ class Log(models.Model):
         self.evtime = datetime.datetime.now()
         super(Log,self).save()
 
+class RequestMeta(models.Model):
+    CONTENT_LENGTH = models.IntegerField(null=True)
+    CONTENT_TYPE = models.TextField(max_length=8192,null=True)
+    HTTP_ACCEPT_ENCODING = models.TextField(max_length=8192,null=True)
+    HTTP_ACCEPT_LANGUAGE = models.TextField(max_length=8192,null=True)    
+    HTTP_HOST = models.CharField(max_length=128,null=True)
+    HTTP_REFERER = models.CharField(max_length=256,null=True)
+    HTTP_USER_AGENT = models.CharField(max_length=256,null=True)
+    QUERY_STRING = models.TextField(max_length=8192,null=True)
+    REMOTE_ADDR = models.CharField(max_length=64,null=True)
+    REMOTE_HOST = models.CharField(max_length=128,null=True)
+    REMOTE_USER = models.CharField(max_length=64,null=True)
+    REQUEST_METHOD = models.CharField(max_length=8,null=True)
+    SERVER_NAME = models.CharField(max_length=128,null=True)
+    SERVER_PORT = models.IntegerField(null=True)
+
 class RequestCounter(models.Model):
     evtime      = models.DateTimeField(null=False)
+    request_meta = models.ForeignKey(RequestMeta,null=False)
     render_time = models.FloatField(null=True)
 
     def save(self):

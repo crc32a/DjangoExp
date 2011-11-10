@@ -6,29 +6,24 @@ import time
 import math
 import copy
 
-@requireRoles()
 def hello(self,rc):
     rc.logger.log("Saying hello")
     return self.render(rc)
 
-@requireRoles()
 def byebye(self,rc):
     rc.logger.log("Saying goodbye")
     return self.render(rc)
 
-@requireRoles()
 def yhwh(self,rc):
     rc.logger.log("YHWH called")
     rc.ctx["yhwh"] = self.yhwhText()
     return self.render(rc)
 
-@requireRoles()
 def showCtx(self,rc):
     rc.logger.log("Showing CTX")
     rc.ctx["ctx"] = copy.deepcopy(rc.ctx)
     return self.render(rc)
 
-@requireRoles()
 def linechart(self,rc):
     kw = {}
     kw["title"] = "Test Chart"
@@ -46,7 +41,6 @@ def linechart(self,rc):
     rc.ctx["line_chart"] = lineChart(rc,'line_chart',**kw)
     return self.render(rc)
 
-@requireRoles()
 def piechart(self,rc):
     user_count = {}
     for (user_name,req_id) in getDistinct(Log,'user_name','req_id'):
@@ -82,7 +76,6 @@ def piechart(self,rc):
 
     return self.render(rc)
 
-@requireRoles()
 def showHide(self,rc):
     return self.render(rc)
 
