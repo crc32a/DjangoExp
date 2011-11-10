@@ -1,8 +1,71 @@
 from app.main.models import *
 from app.main.tools import *
 from app.main.util import *
+from app.main.ipv import *
+
 from form import *
 import random
+
+def ipmask(self,rc):
+    formkey = "ipv4netform"
+    ipnf = rc.session.get(formkey,IPv4NetForm())
+    rc.ctx[formkey] = ipnf
+    rc.session[formkey] = ipnf
+    if rc.form_named()=="IPv4NetForm":
+        ipnf= IPv4NetForm(rc.request.POST)
+        rc.ctx[formkey] = ipnf
+        rc.session[formkey] = ipnf
+        if not ipnf.is_valid():
+            rc.ctx["operror"] = rc.logger.log("Invalid form")
+            return self.render(rc)
+        network = IPv4Net(ipnf.cleaned_data["network"])
+        ip = network.getIp()
+        mask = network.getMask()
+        bc = network.getMask()
+        lo = network.getLo()
+        hi = network.getHi()
+        net = network.getSubnet()
+        netTable = {}
+        netTable["ip"] = ip
+        netTable["ip_bits"] = ipBits(ip,mask)
+        netTable["mask"] = mask
+        netTable["mask_bits"] = ipBits(mask,mask)
+        netTable["net"] = net
+        netTable["net_bits"] = ipBits(net,mask)
+        netTable["lo"] = lo
+        netTable["lo_bits"] = ipBits(lo,mask)
+        netTable["hi"] = hi
+        netTable["hi_bits"] = ipBits(hi,mask)
+        netTable["bc_bits"] = ipBits(bc,mask)
+        netTable["bc"] = bc
+        rc.ctx["wack"] = network.getWack()
+        rc.ctx["nhosts"] = network.getNumberOfHosts()
+        rc.ctx["net_table"] = netTable
+        rc.ctx["ip_class"] = network.getIp().getClass()
+        return self.render(rc)
+    return self.render(rc)
+
+def ipBits(ip,mask):
+    out  = ""
+    gray = "#c0c0c0"
+    red  = "#ffc0c0"
+    blue = "#c0e0ff"
+    for i in xrange(31,-1,-1):
+        mask_bit = (mask.ip>>i)&1
+        ip_bit = (ip.ip>>i)&1
+        if mask_bit:
+            color = red
+        else:
+            color = blue
+        out += "<td bgcolor=\"%s\">%i</td>"%(color,ip_bit)
+        if i != 0 and i%4 == 0:
+            out += "<td bgcolor=\"%s\">&nbsp;</td>"%(color)
+        if i != 0 and i%8 == 0:
+            out += "<td bgcolor=\"%s\">&nbsp;</td>"%(color)
+             
+    return out
+    
+    
 
 def dec2bin(self,rc):
     dec2binform = Dec2BinForm()

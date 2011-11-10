@@ -1,5 +1,26 @@
 from app.main.form import *
+from app.main.ipv import *
 from django import forms
+
+class IPv4NetForm(IdForm):
+    network = forms.CharField(max_length=32,required=True)
+    
+    def clean_network(self):
+        try:
+            data = self.cleaned_data["network"]
+            net = IPv4Net(data)
+            if net.ip == None:
+                msg = "Ip address was invalid"
+                raise forms.ValidationError(msg)
+            if net.wack == None:
+                msg = "Mask or Wack was invalid"
+                raise forms.ValidationError(msg)
+            return data
+        except ValueError:
+            msg  = "network must be of the form a.b.c.d/n "
+            msg += "or a.b.c.d/e.f.g.h where e f g h are the mask"
+            raise forms.ValidationError(msg)
+
 
 class Bin2DecForm(IdForm):
     decimal = forms.IntegerField(required=False)

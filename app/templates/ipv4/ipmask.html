@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block headers %}
+<style type="text/css">
+#iptable tr th {
+    background-color: lightblue;
+    font-size: 12pt;
+}
+</style>
+{% endblock %}
+{% block content %}
+{% if ipv4netform %}
+<form action="/ipv4/ipmask" method="post">
+    <table>
+        {{ ipv4netform.as_table }}
+    </table>
+    <input type="submit" name="button" value="Compute host range"/>
+</form>
+{% endif %}
+
+{% if net_table %}
+    <table id="iptable">
+        <tr>
+            <th>Field</th>
+            <th colspan="11">Oct1</th>
+            <th colspan="11">Oct2</th>
+            <th colspan="11">Oct3</th>
+            <th colspan="9">Oct4</th>
+            <th> Decimal form</th>
+        </tr>
+        <tr><td bgcolor="#a0a0a0">Network</td>{{ net_table.net_bits|safe }}<td bgcolor="#a0a0a0">{{ net_table.net }}</td></tr>
+        <tr><td bgcolor="#a0a0a0">Lowest Host</td>{{ net_table.lo_bits|safe }}<td bgcolor="#a0a0a0">{{ net_table.lo }}</td></tr>
+        <tr><td bgcolor="#a0a0a0">Your Host</td>{{ net_table.ip_bits|safe }}<td bgcolor="#a0a0a0">{{ net_table.ip }}</td></tr>
+        <tr><td bgcolor="#a0a0a0">Highest Host</td>{{ net_table.hi_bits|safe }}<td bgcolor="#a0a0a0">{{ net_table.hi }}</td></tr>
+        <tr><td bgcolor="#a0a0a0">Broadcast</td>{{ net_table.bc_bits|safe }}<td bgcolor="#a0a0a0">{{ net_table.bc }}</td></tr>
+    </table>
+
+<table>
+    <tr><td bgcolor="#a0a0a0">Number of hosts in network</td><td bgcolor="#ffffa0">{{ nhosts }}</td></tr>
+    <tr><td bgcolor="#a0a0a0">CIDR Host</td><td bgcolor="#ffffa0">{{ net_table.ip }}/{{ wack }}</td></tr>
+    <tr><td bgcolor="#a0a0a0">Classical Class</td><td bgcolor="#ffffa0">{{ ip_class }}</td></tr>
+<table>
+
+{% endif %}
+
+{% endblock %}
