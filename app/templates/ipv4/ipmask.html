@@ -43,15 +43,17 @@
 
 {% endif %}
 
-{% if subnets %}
+{% if subnetnhosts %}
 <br/>
 <table>
     <caption>Subnet Info</caption>
     <tr><td bgcolor="#a0a0a0">Subnet Mask</td><td bgcolor="#ffffa0">{{ submask }}</td></tr>
     <tr><td bgcolor="#a0a0a0">Hosts per subnet</td><td bgcolor="#ffffa0">{{ subnetnhosts }}</td></tr>
+    <tr><td bgcolor="#a0a0a0">Number of subnets used</td><td bgcolor="#ffffa0">{{ nsubs }}</td></tr>
 </table>
 
 <br/>
+{% if subnets %}
 <table class="iptable">
     <caption>Subnet List</caption>
     <tr>
@@ -74,6 +76,7 @@
             <td bgcolor="#a0a0a0">{{ s.bc }}</td>
         </tr>
     {% endfor %}
+{% endif %}
 </table>
 
 {% endif %}

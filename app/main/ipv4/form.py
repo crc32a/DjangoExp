@@ -6,6 +6,7 @@ class IPv4NetForm(IdForm):
     network = forms.CharField(max_length=32,required=True)
     desired_subnets = forms.IntegerField(required=False)
     desired_subnet_bits = forms.IntegerField(required=False)
+    display_subnets = forms.BooleanField(required=False)
 
     def clean_network(self):
         try:

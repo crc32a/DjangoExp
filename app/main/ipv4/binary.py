@@ -7,6 +7,7 @@ from form import *
 import random
 
 def ipmask(self,rc):
+    maxdisplayablesubnet = 1<<14
     formkey = "ipv4netform"
     ipnf = rc.session.get(formkey,IPv4NetForm())
     rc.ctx[formkey] = ipnf
@@ -69,22 +70,29 @@ def ipmask(self,rc):
             rc.ctx["subnetnhosts"] = (1<<hbits)-2
             submask = wack2ip(swack)
             rc.ctx["submask"] = submask.getStr()
+            rc.ctx["nsubs"] = nsubs
             subnets = []
-            for i in xrange(0,nsubs):
-                ip = network.getSubnet().getInt()
-                ip += i*(1<<(32-swack))
-                subnet = IPv4Net()
-                subnet.ip = IPv4()
-                subnet.setIp(ip)
-                subnet.setWack(swack)
-                row = {}
-                row["subnet"] = "%s/%s"%(subnet.getIp(),swack)
-                row["bits"] = ipBits(subnet.getIp(),mask,submask=submask)
-                row["bc"] = subnet.getBroadcast()
-                row["lo"] = subnet.getLo()
-                row["hi"] = subnet.getHi()
-                subnets.append(row)
-            rc.ctx["subnets"] = subnets
+            if ipnf.cleaned_data["display_subnets"]:
+                if nsubs > maxdisplayablesubnet:
+                    format  = "Not displaying more then %i subnets"
+                    msg = format%maxdisplayablesubnet
+                    rc.ctx["operror"] = msg
+                    return self.render(rc)
+                for i in xrange(0,nsubs):
+                    ip = network.getSubnet().getInt()
+                    ip += i*(1<<(32-swack))
+                    subnet = IPv4Net()
+                    subnet.ip = IPv4()
+                    subnet.setIp(ip)
+                    subnet.setWack(swack)
+                    row = {}
+                    row["subnet"] = "%s/%s"%(subnet.getIp(),swack)
+                    row["bits"] = ipBits(subnet.getIp(),mask,submask=submask)
+                    row["bc"] = subnet.getBroadcast()
+                    row["lo"] = subnet.getLo()
+                    row["hi"] = subnet.getHi()
+                    subnets.append(row)
+                rc.ctx["subnets"] = subnets
         return self.render(rc)
     return self.render(rc)
 
