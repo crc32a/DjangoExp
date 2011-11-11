@@ -49,7 +49,7 @@ def ipmask(self,rc):
 
         sbits = ipnf.cleaned_data["desired_subnet_bits"]
         if sbits:
-            nsubs = (1<<sbits)-1
+            nsubs = 1<<sbits
         else:
             nsubs = ipnf.cleaned_data["desired_subnets"]
             if nsubs != None:
