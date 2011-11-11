@@ -229,7 +229,7 @@ def maxStr(n):
 def intOrZero(strIn):
     try:
         val = int(strIn)
-    except ValueError:
+    except:
         val = 0
     return val
 
