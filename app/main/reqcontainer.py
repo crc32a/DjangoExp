@@ -27,7 +27,7 @@ metaMap = [ ("CONTENT_LENGTH",intOrZero),
 class ReqContainer(object):
     def __init__(self,caller_object,request,*args,**kw):
         self.rcount = RequestCounter()
-        self.rcount.request_meta = self.fetchRequestMeta(request)
+        self.fetchRequestMeta(self.rcount,request)
         self.rcount.save()
         self.req_id = self.rcount.id
         self.args = copy.deepcopy(args) #For debugging purposes
@@ -101,11 +101,8 @@ class ReqContainer(object):
             form_name = None
         return form_name
 
-    def fetchRequestMeta(self,request):
-        obj = RequestMeta()
+    def fetchRequestMeta(self,rcount,request):
         for (name,cookfunc) in metaMap:
             val = request.META.get(name,None)
             cooked_val = cookfunc(val)
-            setattr(obj,name,cooked_val)
-        obj.save()
-        return obj
+            setattr(rcount,name,cooked_val)
