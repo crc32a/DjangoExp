@@ -4,7 +4,9 @@ from django import forms
 
 class IPv4NetForm(IdForm):
     network = forms.CharField(max_length=32,required=True)
-    
+    desired_subnets = forms.IntegerField(required=False)
+    desired_subnet_bits = forms.IntegerField(required=False)
+
     def clean_network(self):
         try:
             data = self.cleaned_data["network"]

@@ -21,10 +21,11 @@ def ipmask(self,rc):
         network = IPv4Net(ipnf.cleaned_data["network"])
         ip = network.getIp()
         mask = network.getMask()
-        bc = network.getMask()
+        bc = network.getBroadcast()
         lo = network.getLo()
         hi = network.getHi()
         net = network.getSubnet()
+        mask = network.getMask()
         netTable = {}
         netTable["ip"] = ip
         netTable["ip_bits"] = ipBits(ip,mask)
@@ -38,34 +39,86 @@ def ipmask(self,rc):
         netTable["hi_bits"] = ipBits(hi,mask)
         netTable["bc_bits"] = ipBits(bc,mask)
         netTable["bc"] = bc
+        netTable["mask"] = mask
+        netTable["mask_bits"] = ipBits(mask,mask)
         rc.ctx["wack"] = network.getWack()
         rc.ctx["nhosts"] = network.getNumberOfHosts()
         rc.ctx["net_table"] = netTable
         rc.ctx["ip_class"] = network.getIp().getClass()
+
+        sbits = ipnf.cleaned_data["desired_subnet_bits"]
+        if sbits:
+            nsubs = (1<<sbits)-1
+        else:
+            nsubs = ipnf.cleaned_data["desired_subnets"]
+            if nsubs != None:
+                if nsubs <1:
+                    msg = "Desired Subnets must be greater then 0"
+                sbits = needbits(nsubs)
+
+        if sbits:
+            abits = 32 - network.getWack()
+            if sbits > abits:
+                format  = "Sorry subnet required %i bits but only %i "
+                format += "were available for subnetting."
+                msg = format%(sbits,abits)
+                rc.ctx["operror"] = msg
+                return self.render(rc)
+            swack = network.getWack() + sbits
+            hbits = 32-swack
+            rc.ctx["subnetnhosts"] = (1<<hbits)-2
+            submask = wack2ip(swack)
+            rc.ctx["submask"] = submask.getStr()
+            subnets = []
+            for i in xrange(0,nsubs):
+                ip = network.getSubnet().getInt()
+                ip += i*(1<<(32-swack))
+                subnet = IPv4Net()
+                subnet.ip = IPv4()
+                subnet.setIp(ip)
+                subnet.setWack(swack)
+                row = {}
+                row["subnet"] = "%s/%s"%(subnet.getIp(),swack)
+                row["bits"] = ipBits(subnet.getIp(),mask,submask=submask)
+                row["bc"] = subnet.getBroadcast()
+                row["lo"] = subnet.getLo()
+                row["hi"] = subnet.getHi()
+                subnets.append(row)
+            rc.ctx["subnets"] = subnets
         return self.render(rc)
     return self.render(rc)
 
-def ipBits(ip,mask):
-    out  = ""
-    gray = "#c0c0c0"
-    red  = "#ffc0c0"
-    blue = "#c0e0ff"
+def needbits(nsubs):
+    n = nsubs - 1
+    i = 0
+    while n > 0:
+        i += 1
+        n >>= 1
+    return i
+
+def ipBits(ip,mask,submask=IPv4("0.0.0.0")):
+    out   = ""
+    gray  = "#c0c0c0"
+    red   = "#ffc0c0"
+    blue  = "#c0e0ff"
+    green = "#a0ffa0"
     for i in xrange(31,-1,-1):
         mask_bit = (mask.ip>>i)&1
         ip_bit = (ip.ip>>i)&1
+        subnet_bit = (submask.ip>>i)&1
         if mask_bit:
             color = red
+        elif subnet_bit:
+            color = green
         else:
             color = blue
-        out += "<td bgcolor=\"%s\">%i</td>"%(color,ip_bit)
+        out += "            <td bgcolor=\"%s\">%i</td>\n"%(color,ip_bit)
         if i != 0 and i%4 == 0:
-            out += "<td bgcolor=\"%s\">&nbsp;</td>"%(color)
+            out += "            <td bgcolor=\"%s\">&nbsp;</td>\n"%(color)
         if i != 0 and i%8 == 0:
-            out += "<td bgcolor=\"%s\">&nbsp;</td>"%(color)
+            out += "            <td bgcolor=\"%s\">&nbsp;</td>\n"%(color)
              
     return out
-    
-    
 
 def dec2bin(self,rc):
     dec2binform = Dec2BinForm()
