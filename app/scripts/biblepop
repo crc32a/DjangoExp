@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+
+import sys
+import os
+dir_name = os.path.dirname(os.path.abspath("__file__"))
+base_dir = os.path.abspath(os.path.join(dir_name,"../.."))
+
+sys.path.insert(0,base_dir)
+from django.core.management import setup_environ
+from app import settings
+setup_environ(settings)
+
+from django.db.models import Q
+from app.main.models import *
+from app.main.const import *
+from app.main.tools import *
+from app.main.util import *
+from app.urls import viewList
+
+
+def printf(format,*args): sys.stdout.write(format%args)
+
+def usage(prog):
+    printf("Usage is %s <bible.json>\n",prog)
+    printf("\n")
+    printf("Populates the bible database")
+
+if __name__ == "__main__":
+    prog = os.path.basename(sys.argv[0])
+    if len(sys.argv)<2:
+        usage(prog)
+        sys.exit()
+    json_file = sys.argv[1]
+    try:
+        b = Bible.objects.get(name=default_bible)
+        printf("Bible %s already found\n",default_bible)
+    except Bible.DoesNotExist:
+        printf("Adding %s translation of the bible\n",default_bible)
+        b = Bible()
+        b.name = default_bible
+        b.save()
+    printf("Loading bible source file %s\n",json_file)
+    sys.stdout.flush()
+    bible_source = load_json(json_file)
+    printf("Finished loading source\n")
+    sys.stdout.flush()
+    bookMap = {}
+    verseMap = {}
+    for (bookname,booknum,chap,verse,frags) in bible_source:
+        if not bookMap.has_key(bookname):
+            bookMap[bookname]=BibleBook()
+            bookMap[bookname].name = bookname
+            bookMap[bookname].num = num = booknum
+            bookMap[bookname].bible = b
+            bookMap[bookname].save()
+            printf("New book found %s -> %s\n",bookname.encode("utf-8"),booknum)
+        book = bookMap[bookname]
+        vkey = (book.num,chap,verse)
+        if not verseMap.has_key(vkey):
+            v = BibleVerse()
+            v.book = book
+            v.chapter = chap
+            v.verse = verse
+            v.save()
+            verseMap[vkey] = v
+        else:
+            v = verseMap[vkey]
+        for (ft,fv) in frags:
+            frag = BibleFrag()
+            frag.verse = v
+            frag.ftype = ft
+            frag.fval = fv
+            frag.save()
+                    

@@ -6,6 +6,7 @@ from django.db.models import Q,Count
 from django.db import transaction
 from app.main.graph.tool import pieChart
 from app.main.form import *
+from app.main.const import *
 import django.utils.html
 import re
 
@@ -232,6 +233,15 @@ def intOrZero(strIn):
     except:
         val = 0
     return val
+
+def getBibleBook(bookId):
+    bible = Bible.objects.get(name=default_bible)
+    q = Q(bible=bible)
+    if type(bookId) in set([type(1L),type(1)]):
+        q &= Q(num=long(bookId))
+    else:
+        q &= Q(name=bookId)
+    return BibleBook.objects.get(q)
 
 @transaction.commit_manually
 def flush_tx():

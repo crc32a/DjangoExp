@@ -14,4 +14,13 @@ import app.main.cachemanager
 from app.main.models import *
 from app.main.tools import *
 from app.main.util import *
+from app.main.const import *
+
+
+q  = Q(verse__book__name="John")
+q &= Q(verse__chapter=3)
+q &= Q(verse__verse__gte=15)
+q &= Q(verse__verse__lte=17)
+
+j316 = BibleFrag.objects.filter(q).order_by('id')
 

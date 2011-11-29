@@ -144,6 +144,17 @@ def p64d(b64data,compress=COMPRESS,debug=False):
     obj = cPickle.loads(pdata)
     return obj
 
+def load_cpickle(file_path,compress=True):
+    b64data = open(fullPath(file_path),"r").read()
+    obj = p64d(b64data,compress=compress)
+    return obj
+
+def save_cpickle(file_path,obj,compress=True):
+    b64data = p64e(obj,compress=compress)
+    open(fullPath(file_path),"w").write(b64data)
+    
+
+
 def tupleDictList(dict_list,*cols,**kw):
     out = []
     for d in dict_list:
@@ -188,7 +199,6 @@ def pad(digits,ch,val,*args,**kw):
 def save_json(json_file,obj):
     json_data = json.dumps(obj, indent=2)
     open(fullPath(json_file),"w").write(json_data)
-
 
 def load_json(json_file):
     json_data = open(fullPath(json_file),"r").read()
@@ -284,3 +294,4 @@ def bin2int(binStr):
     for i in xrange(len(bits)-1,-1,-1):
         dec += bits[i]*(1<<i)
     return dec
+

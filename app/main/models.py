@@ -112,3 +112,28 @@ class RequestCounter(models.Model):
     def save(self):
         self.evtime = datetime.datetime.now()
         super(RequestCounter,self).save()
+
+
+class Bible(models.Model):
+    name = models.CharField(max_length=128,null=False,unique=True)
+    
+
+class BibleBook(models.Model):
+    bible = models.ForeignKey(Bible,null=False)
+    name = models.CharField(max_length=128,null=False)
+    num = models.IntegerField(null=False)
+    class Meta:
+        unique_together = [("bible","name"),("bible","num")]
+
+class BibleVerse(models.Model):
+    book = models.ForeignKey(BibleBook,null=False)
+    chapter = models.IntegerField(null=False)
+    verse = models.IntegerField(null=False)
+    class Meta:
+        unique_together = [("book","chapter","verse")]
+
+class BibleFrag(models.Model):
+    verse = models.ForeignKey(BibleVerse,null=False)
+    ftype = models.CharField(max_length=16,null=False)
+    fval = models.CharField(max_length=4096,null=False)
+        
