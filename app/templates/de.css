@@ -104,6 +104,10 @@ h4 {
  padding: 5px 0;
  }
 
+.msize {
+    font-size: 12pt;
+}
+
 .td_cyan {
     background-color: #70ffff;
     color: #000000;

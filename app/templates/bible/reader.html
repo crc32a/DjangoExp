@@ -10,17 +10,17 @@
 {% endif %}
 
 {% if verses %}
-<table>
+<table align="center">
     <tr>
-        <td>{% if prev_link %}<a href="{{ prev_link }}">Prev</a>{% endif %}</td>
-        <td>{% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}</td>
+        <td class="msize">{% if prev_link %}<a href="{{ prev_link }}">Prev</a>{% endif %}</td>
+        <td class="msize">{% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}</td>
     </tr>
 </table>
 {{ verses|safe }}
-<table>
+<table align="center">
     <tr>
-        <td>{% if prev_link %}<a href="{{ prev_link }}">Prev</a>{% endif %}</td>
-        <td>{% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}</td>
+        <td class="msize">{% if prev_link %}<a href="{{ prev_link }}">Prev</a>{% endif %}</td>
+        <td class="msize">{% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}</td>
     </tr>
 </table>
 {% endif %}
