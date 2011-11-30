@@ -14,6 +14,22 @@ import os
 
 COMPRESS = True
 
+class RowColIndex(object):
+    def __init__(self,ncols):
+        self.ncols = ncols
+
+    def rc2abs(self,row,col,inv=False):
+        if inv:
+            return col*self.ncols + row
+        return row*self.ncols + col
+
+    def abs2rc(self,i,inv=False):
+        row = i/self.ncols
+        col = i%self.ncols
+        if inv:
+            return (col,row)
+        return (row,col)
+
 class Timer(object):
     def __init__(self):
         self.begin   = time.time()
@@ -294,4 +310,3 @@ def bin2int(binStr):
     for i in xrange(len(bits)-1,-1,-1):
         dec += bits[i]*(1<<i)
     return dec
-

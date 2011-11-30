@@ -243,6 +243,12 @@ def getBibleBook(bookId):
         q &= Q(name=bookId)
     return BibleBook.objects.get(q)
 
+def splitUrlPath(rc):
+    path = rc.path.split("/")
+    if len(path)>0 and len(path[-1])==0:
+        path.pop()
+    return path
+
 @transaction.commit_manually
 def flush_tx():
     transaction.commit()

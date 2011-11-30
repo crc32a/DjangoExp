@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if books %}
+{{ books|safe }}
+{% endif %}
+
+{% if chapters %}
+{{ chapters|safe }}
+{% endif %}
+
+{% if verses %}
+<table>
+    <tr>
+        <td>{% if prev_link %}<a href="{{ prev_link }}">Prev</a>{% endif %}</td>
+        <td>{% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}</td>
+    </tr>
+</table>
+{{ verses|safe }}
+<table>
+    <tr>
+        <td>{% if prev_link %}<a href="{{ prev_link }}">Prev</a>{% endif %}</td>
+        <td>{% if next_link %}<a href="{{ next_link }}">Next</a>{% endif %}</td>
+    </tr>
+</table>
+{% endif %}
+{% endblock %}
+
+

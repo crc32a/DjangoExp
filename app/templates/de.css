@@ -153,6 +153,18 @@ h4 {
    background-color: lightblue;
   }
 
+.linkTable caption {
+    font-size: 16pt;
+    font-weight: 600;
+    font-family: "Arial Black","Helvetica", "sans-serif";
+}
+
+.linkTable tr td {
+    font-size: 12pt;
+    font-weight: 600;
+    font-family: "Arial Black","Helvetica", "sans-serif";
+}
+
 a {
     text-decoration: none;
 }
