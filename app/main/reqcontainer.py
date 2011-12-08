@@ -26,8 +26,11 @@ metaMap = [ ("CONTENT_LENGTH",intOrZero),
 
 class ReqContainer(object):
     def __init__(self,caller_object,request,*args,**kw):
+        self.rtimer = Timer()
+        self.rtimer.start()
         self.rcount = RequestCounter()
         self.path = request.path
+        self.rcount.req_path = maxStr(256)(request.path)
         self.fetchRequestMeta(self.rcount,request)
         self.rcount.save()
         self.req_id = self.rcount.id

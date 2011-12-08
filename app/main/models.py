@@ -94,6 +94,9 @@ class Log(models.Model):
 class RequestCounter(models.Model):
     evtime      = models.DateTimeField(null=False)
     render_time = models.FloatField(null=True)
+    request_time = models.FloatField(null=True)
+    resp_length = models.IntegerField(null=True)
+    req_path = models.CharField(max_length=256,null=True)
     CONTENT_LENGTH = models.IntegerField(null=True)
     CONTENT_TYPE = models.TextField(max_length=8192,null=True)
     HTTP_ACCEPT_ENCODING = models.TextField(max_length=8192,null=True)

@@ -32,6 +32,11 @@ class BaseView(object):
             tb = traceback.format_exc()
             rc.logger.log("Exception caught",exception=tb)
             raise
+        rc.rtimer.stop()
+        request_time = rc.rtimer.read()
+        rc.rcount.request_time = request_time
+        rc.rcount.resp_length = len(resp.content)
+        rc.rcount.save()
         return resp
 
     def render(self,rc):
