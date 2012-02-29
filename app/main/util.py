@@ -37,6 +37,10 @@ class Timer(object):
         self.stored  = 0.0
         self.stopped = True
 
+    def restart(self):
+        self.reset()
+        self.start()
+
     def start(self):
         if not self.stopped:
             return
