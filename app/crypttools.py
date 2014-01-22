@@ -22,7 +22,9 @@ mosso_hash = Crypto.Hash.SHA.new("Mosso's Secret").digest()
 
 #passcrypt and passcrypt_md5 from Christopher Arndts authlib.py
 #module found at http://www.chrisarndt.de/en/software/python/#auth
-
+hmap = dict(zip([ch for ch in "0123456789abcdef"],[i for i in xrange(0,16)]))
+cmap = dict(zip([i for i in xrange(0,16)],[ch for ch in "0123456789abcdef"]))
+init_vect_hex = "21bf3c739fcca1fcffc7eab41626e32f"
 des_salt_str  = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 des_salt_str += "abcdefghijklmnopqrstuvwxyz"
 DES_SALT = [ch for ch in des_salt_str]
@@ -170,9 +172,14 @@ class UnknownPickleMethod(AesWrapperException):
     def __repr__(self):
         return "Unknown pickle method"
 
+def fromHex(str_in):
+    out = ""
+    for i in xrange(0,len(str_in),2):
+        out += chr((hmap[str_in[i + 0]]<<4)+(hmap[str_in[i + 1]]))
+    return out
+
 def toHex(str_in):
     out = ""
-    cmap = dict(zip([i for i in xrange(0,16)],[ch for ch in "0123456789abcdef"]))
     for ch in str_in:
         i = ord(ch)
         out += cmap[(i>>4)]
@@ -185,7 +192,7 @@ class Aes_wrapper(object):
         key_in = key_in.encode("utf-8")
     self.key = Crypto.Hash.SHA.new(key_in).digest()[0:16]
     self.mode = Crypto.Cipher.AES.MODE_CBC
-    self.aes = Crypto.Cipher.AES.new(self.key,self.mode)
+    self.aes = Crypto.Cipher.AES.new(self.key,mode=self.mode,IV=IV)
     self.len_bytes = len_bytes
     self.max_size = 2**(len_bytes*8) - 1
     self.len_nibbles = len_bytes * 2
@@ -333,3 +340,20 @@ def b64decode(str_in):
 def b64encode(str_in):
     str_out = base64.standard_b64encode(str_in)
     return str_out
+
+def itoa(num,base):
+  nummap = [c for c in "0123456789abcdefghijklmnopqrstuvwxyz"]
+  out = ""
+  if num == 0:
+    return "0"
+  if num < 0:
+    return None
+  if base <2 or base > len(nummap):
+    return None
+  while num > 0:
+    digit = num % base
+    out = nummap[digit] + out
+    num /=base
+  return out
+
+IV = fromHex(init_vect_hex) #Initialization Vector

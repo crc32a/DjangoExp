@@ -47,7 +47,7 @@ class PickleCache(models.Model):
         super(PickleCache,self).save()
 
     class Meta:
-        unique_together = [("view_class","cache_key")]
+        unique_together = [("view_class","cache_key")]    
 
 class User(models.Model):
     uid = models.CharField(max_length=32,null=False,unique=True)
@@ -71,6 +71,18 @@ class User(models.Model):
         hash = sha256(passwd.encode("utf-8"))
         self.passwd = hash
         super(User,self).save()
+
+class BloodSugar(models.Model):
+    user = models.ForeignKey(User,null=False,editable=False)
+    evtime = models.DateTimeField(null=False)
+    date = models.DateTimeField(null=False)
+    sugar = models.IntegerField(null=False)
+
+    def __unicode__(self):
+        return unicode("%s:%s"%(user.uid,sugar))
+
+    class Meta:
+        unique_together = [("user","date")]
 
 class ExceptionLog(models.Model):
     trace_back = models.TextField(max_length=8192,null=False)
